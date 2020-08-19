@@ -1,0 +1,6 @@
+{
+    "simpleCommands": {
+        "hello": "World!"
+    },
+    "permissions": {}
+}
