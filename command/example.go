@@ -3,8 +3,8 @@ package command
 import (
 	"fmt"
 
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/log"
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/multiplexer"
+	"github.com/PCTISA/ISAAC/log"
+	"github.com/PCTISA/ISAAC/multiplexer"
 	"github.com/patrickmn/go-cache"
 )
 

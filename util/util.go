@@ -1,9 +1,13 @@
 package util
 
 import (
+	"fmt"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 /* === Helpers === */
@@ -50,4 +54,61 @@ func IsURL(test string) bool {
 	}
 
 	return true
+}
+
+// ChannelSend is a helper function for easily sending a message to the current
+// channel.
+func ChannelSend(session *discordgo.Session, channelID, message string) (*discordgo.Message, error) {
+	return session.ChannelMessageSend(channelID, message)
+}
+
+// ChannelSendf is a helper function like ChannelSend for sending a formatted
+// message to the current channel.
+func ChannelSendf(
+	session *discordgo.Session,
+	channelID, format string,
+	a ...interface{},
+) (*discordgo.Message, error) {
+	return session.ChannelMessageSend(
+		channelID, fmt.Sprintf(format, a...),
+	)
+}
+
+func GetMsgURL(guildID, channelID, messageID string) string {
+	return "https://discordapp.com/channels/" +
+		guildID + "/" + channelID + "/" + messageID
+}
+
+var (
+	idRE      = regexp.MustCompile(`^\d{18}`)
+	botRE     = regexp.MustCompile(`<@&\d{18}>`)
+	userRE    = regexp.MustCompile(`<@!*\d{18}>`)
+	channelRE = regexp.MustCompile(`<#\d{18}>`)
+
+	idExtractRE = regexp.MustCompile(`\d{18}`)
+)
+
+// IsID checks if the supplied string is a Discord ID
+func IsID(test string) bool {
+	return idRE.MatchString(test)
+}
+
+// GetID returns the ID (if there is one) from the supplied string
+func GetID(input string) string {
+	return idExtractRE.FindString(input)
+}
+
+// IsBot checks if the supplied string is mentioning a bot
+func IsBot(test string) bool {
+	return botRE.MatchString(test)
+}
+
+// IsUser checks if the supplied string is mentioning a user
+func IsUser(test string) bool {
+	return userRE.MatchString(test)
+}
+
+// IsChannel checks if the supplied string is mentioning a channel
+func IsChannel(test string) bool {
+	return channelRE.MatchString(test)
 }

@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/multiplexer"
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/util"
+	"github.com/PCTISA/ISAAC/multiplexer"
+	"github.com/PCTISA/ISAAC/util"
 
 	"github.com/tidwall/gjson"
 )

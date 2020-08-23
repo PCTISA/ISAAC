@@ -5,13 +5,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/command"
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/config"
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/log"
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/multiplexer"
-	"github.com/patrickmn/go-cache"
+	"github.com/PCTISA/ISAAC/command"
+	"github.com/PCTISA/ISAAC/config"
+	"github.com/PCTISA/ISAAC/log"
+	"github.com/PCTISA/ISAAC/multiplexer"
 
 	"github.com/bwmarrin/discordgo"
 	goenv "github.com/caarlos0/env/v6"
@@ -23,7 +21,6 @@ type environment struct {
 	Debug     bool   `env:"DEBUG" envDefault:"false"`
 	DataDir   string `env:"DATA_DIR" envDefault:"data/"`
 	ConfigURL string `env:"CONFIG_URL"`
-	Fuzzy     bool   `env:"USE_FUZZY" envDefault:"false"`
 }
 
 var (
@@ -91,16 +88,20 @@ func main() {
 
 	/* Register the commands with the multiplexer*/
 	mux.Register(
-		command.Example{
-			Command:  "example",
-			HelpText: "Quick one-liner about what the command does",
-
-			/* Example rate limiter. Prevents a single user from executing the command
-			   more than 5 times in a minute */
-			RateLimitMax: 5,
-			RateLimitDB:  cache.New(time.Minute*1, time.Minute*1),
-
-			Logger: logs,
+		command.Gatekeeper{
+			Command:  "role",
+			HelpText: "Manage your access to roles, and their related channels",
+			Logger:   logs,
+		},
+		command.JPEG{
+			Command:  "jpeg",
+			HelpText: "More JPEG for the last image. 'nuff said",
+			Logger:   logs,
+		},
+		command.Help{
+			Command:  "help",
+			HelpText: "Displays help  information regarding the bot's commands",
+			Logger:   logs,
 		},
 	)
 
@@ -123,10 +124,6 @@ func main() {
 	/* Initialize the commands */
 	mux.Initialize()
 
-	if env.Fuzzy {
-		mux.UseFuzzy()
-	}
-
 	/* === End Register === */
 
 	/* Handle commands and start DiscordGo */
@@ -141,22 +138,15 @@ func main() {
 	}
 
 	/* Set a fun status message */
-
-	/*
-		idle := 0
-		dg.UpdateStatusComplex(discordgo.UpdateStatusData{
-			IdleSince: &idle,
-			Game: &discordgo.Game{
-				Name: "you",
-				Type: discordgo.GameTypeWatching,
-				Assets: discordgo.Assets{
-					LargeImageID: "watching",
-					LargeText:    "Watching...",
-				},
-			},
-			Status: "online",
-		})
-	*/
+	idle := 0
+	dg.UpdateStatusComplex(discordgo.UpdateStatusData{
+		IdleSince: &idle,
+		Game: &discordgo.Game{
+			Name: "with your network",
+			Type: discordgo.GameTypeGame,
+		},
+		Status: "online",
+	})
 
 	defer dg.Close()
 

@@ -3,7 +3,7 @@ package log
 import (
 	"os"
 
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/multiplexer"
+	"github.com/PCTISA/ISAAC/multiplexer"
 	"github.com/sirupsen/logrus"
 )
 

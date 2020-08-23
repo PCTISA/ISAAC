@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PulseDevelopmentGroup/Build-A-Bot/util"
+	"github.com/PCTISA/ISAAC/util"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/patrickmn/go-cache"
